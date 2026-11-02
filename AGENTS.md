@@ -1,9 +1,27 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# Pinwheel: agent instructions
 
-## This is NOT the Next.js you know
+This is a monorepo. Each top-level folder is a self-contained package with its own dependencies
+and tooling. Run commands from inside the package you're working on, not from the repo root.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+| Folder      | What it is                                        |
+| ----------- | ------------------------------------------------- |
+| `frontend/` | Next.js 16 app (React 19, Tailwind v4, shadcn/ui) |
+| `backend/`  | Python backend (planned; not created yet)         |
+| `docs/`     | Documentation (planned; not created yet)          |
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+Before working in a package, read its own `AGENTS.md` (for example `frontend/AGENTS.md`). The
+more specific file wins when instructions conflict.
 
-<!-- END:nextjs-agent-rules -->
+## Where things go
+
+- Repo-wide config stays at the root: git hooks (`.husky/`), editor settings (`.vscode/`),
+  `.editorconfig`, the root `.gitignore`, `.mcp.json`, and agent skills (`.agents/skills/`,
+  linked into `.claude/skills/`).
+- Language-specific config stays inside its package: dependencies, linters, formatters, and
+  ignores for build output. Don't add a root `package.json` or root Prettier/ESLint config.
+
+## Checks
+
+- Frontend: `cd frontend && npm run check` (typecheck, lint, format check).
+- The pre-commit hook (`.husky/pre-commit`) runs each package's lint-staged step. When adding a
+  package, add its step there.
