@@ -1,1 +1,2 @@
-npx lint-staged
+# Repo-wide git hooks. Each package runs its own checks on its staged files.
+(cd frontend && npx lint-staged)
